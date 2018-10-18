@@ -45,7 +45,7 @@ syntax match jsxFragmentStart '<>'
 " <tag/>
 " s~~~~e
 " A big start regexp borrowed from https://git.io/vDyxc
-syntax region jsxRegionNonFragment
+syntax region jsxRegion
       \ start=+\(\((\|{\|}\|\[\|,\|&&\|||\|?\|:\|=\|=>\|\Wreturn\|^return\|\Wdefault\|^\|>\)\_s*\)\@<=<\_s*\z([_\$a-zA-Z]\(\.\?[\$0-9a-zA-Z]\+\)*\)+
       \ skip=+<!--\_.\{-}-->+
       \ end=+</\_s*\z1>+
@@ -67,9 +67,6 @@ syntax region jsxFragment
                 \@Spell
       \ keepend
       \ extend
-
-" Regular tags and fragments
-syntax cluster jsxRegion add=jsxRegionNonFragment add=jsxFragment
 
 " </tag>
 " ~~~~~~
@@ -128,8 +125,9 @@ syntax region jsxEscapeJs
 syntax match jsxIfOperator +?+
 syntax match jsxElseOperator +:+
 
-syntax cluster jsExpression add=jsxRegion add=jsxFragment
-syntax cluster javascriptNoReserved add=jsxRegion add=jsxFragment
+syntax cluster jsExpression add=jsxRegion
+syntax cluster jsExpression add=jsxFragment
+syntax cluster javascriptNoReserved add=jsxRegion
 
 let s:vim_jsx_pretty_enable_jsx_highlight = get(g:, 'vim_jsx_pretty_enable_jsx_highlight', 1)
 

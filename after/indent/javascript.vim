@@ -130,10 +130,21 @@ function! GetJsxIndent()
       let ind = ind - s:sw()
     endif
 
-    " }}>   | }}>
-    " <div> | ##<div>
-    if (getline(v:lnum-1) =~? '^[^<]\+}}>')
-      let ind = ind + s:sw()
+    " <div style={{ | <div style={{
+    " }}>           | }}>
+    " </div>        | ##</div>
+    " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    " <div          | <div
+    "   style={{    |   style={{
+    "   }}>         |   }}>
+    "     <div/>    |   <div/>##
+    " </div>        | </div>
+    "
+    if (getline(v:lnum-1) =~? '^[^<]\+[^<]\+}}>')
+      if (! getline(v:lnum-1) =~? '^[^<]\*<[^<]\*}}>')
+      else
+        let ind = ind + s:sw()
+      endif
     endif
 
     " <div           | <div
